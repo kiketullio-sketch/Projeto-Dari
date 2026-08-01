@@ -1,0 +1,10 @@
+{
+  "description": "Showcases a refined, elegant landing page for a women's fashion boutique featuring a seamless logo and a prominent, sticky appointment booking button.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

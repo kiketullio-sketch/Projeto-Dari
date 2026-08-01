@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-dari-bg: #f5ede6;
+  --color-dari-bg2: #ede3db;
+  --color-dari-rose: #b04070;
+  --color-dari-rose-light: #d4698a;
+  --color-dari-rose-dark: #8a2f56;
+  --color-dari-blush: #e8d2d8;
+  --color-dari-text: #2c1f18;
+  --color-dari-muted: #8a7570;
+  --color-dari-gold: #c9a96e;
+  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-cormorant: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Jost', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-dari-bg);
+  font-family: var(--font-sans);
+  color: var(--color-dari-text);
+}
