@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import logoImg from '@/imports/images.png'
+import { useState, useEffect, useRef } from 'react'
+import logoImg from '@/imports/images.images.jpeg'
 import heroImg from '@/imports/Screenshot_2026-08-02_at_14.24.27.png'
 import aboutImg from '@/imports/Screenshot_2026-08-01_at_20.03.18.png'
 import gallery1 from '@/imports/Screenshot_2026-08-01_at_20.02.58.png'
@@ -10,6 +10,136 @@ import gallery4 from '@/imports/Screenshot_2026-08-01_at_20.04.32.png'
 const BG = '#f5ede6'
 const WA_LINK = 'https://wa.me/5542999237535?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20um%20hor%C3%A1rio%20exclusivo%20na%20Dari%20Boutique%20%F0%9F%98%8A'
 const IG_LINK = 'https://www.instagram.com/dari.boutique/'
+
+const TESTIMONIALS = [
+  {
+    name: 'Silmara Chiquito',
+    role: 'Local Guide · 79 avaliações',
+    text: 'Fui atendida como uma princesa. Por sinal o pessoal que faz atendimento ao público, poderia ir lá ficar um tempinho, pra aprender como se atende os clientes.',
+  },
+  {
+    name: 'Letícia Szczerepa',
+    role: 'Local Guide · 89 avaliações',
+    text: 'A loja é incrível, com muuuita variedade de roupa, vestidos, blusas e etc. O atendimento é excepcional, a Dari é muito atenciosa, retorna as mensagens, vê a disponibilidade de pedir de fábrica as roupas caso não tenha no seu tamanho. Adorei e super recomendo!',
+  },
+  {
+    name: 'Jociana Ferreira',
+    role: '3 avaliações',
+    text: 'Compro a quase 10 anos e reconheço como uma das melhores Boutiques da cidade, preço justo, ambiente acolhedor, se necessário vem até mim. Roupas diferenciadas, bom gosto ímpar! Vale muito pena.',
+  },
+  {
+    name: 'Danieli Milan',
+    role: '2 avaliações',
+    text: 'Atendimento sempre com muita educação. Me deixa super à vontade pra escolher e provar. Além de sempre ter uma dica de moda para compor looks. Sou fã!!!',
+  },
+  {
+    name: 'Juliana Bergmann Issa',
+    role: '9 avaliações',
+    text: 'Amo a Dari Boutique, principalmente pelo bom gosto e por nos oferecer marcas exclusivas! A loja é uma graça, super aconchegante e o melhor com muitas vagas pra estacionar!',
+  },
+]
+
+function StarIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="#c9a96e" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    </svg>
+  )
+}
+
+function Testimonials() {
+  const [active, setActive] = useState(0)
+  const [visible, setVisible] = useState(true)
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const goTo = (idx: number) => {
+    setVisible(false)
+    setTimeout(() => {
+      setActive(idx)
+      setVisible(true)
+    }, 280)
+  }
+
+  useEffect(() => {
+    timer.current = setInterval(() => {
+      setVisible(false)
+      setTimeout(() => {
+        setActive(prev => (prev + 1) % TESTIMONIALS.length)
+        setVisible(true)
+      }, 280)
+    }, 4500)
+    return () => { if (timer.current) clearInterval(timer.current) }
+  }, [])
+
+  const t = TESTIMONIALS[active]
+
+  return (
+    <section style={{ backgroundColor: BG, padding: '64px 32px' }}>
+      <div style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
+
+        {/* Nota Google */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 36 }}>
+          <div style={{ display: 'flex', gap: 3 }}>
+            {[...Array(5)].map((_, i) => <StarIcon key={i} />)}
+          </div>
+          <span style={{
+            fontFamily: "'Jost', sans-serif", fontSize: 14, fontWeight: 500,
+            color: '#6b5048', letterSpacing: '0.04em',
+          }}>
+            5.0 no Google · avaliações reais de clientes
+          </span>
+        </div>
+
+        {/* Depoimento */}
+        <div style={{
+          minHeight: 140,
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'translateY(0)' : 'translateY(6px)',
+          transition: 'opacity 0.28s ease, transform 0.28s ease',
+        }}>
+          <p style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontStyle: 'italic',
+            fontSize: 'clamp(19px, 2.2vw, 23px)',
+            lineHeight: 1.7,
+            color: '#2c1f18',
+            marginBottom: 24,
+          }}>
+            "{t.text}"
+          </p>
+          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 13, fontWeight: 600, letterSpacing: '0.14em', color: '#b04070', marginBottom: 2 }}>
+            {t.name}
+          </p>
+          <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 12, fontWeight: 300, color: '#8a7570' }}>
+            {t.role}
+          </p>
+        </div>
+
+        {/* Dots */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 28 }}>
+          {TESTIMONIALS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              style={{
+                width: i === active ? 20 : 7,
+                height: 7,
+                borderRadius: 4,
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                backgroundColor: i === active ? '#b04070' : 'rgba(176,64,112,0.25)',
+                transition: 'width 0.3s ease, background-color 0.3s ease',
+              }}
+              aria-label={`Depoimento ${i + 1}`}
+            />
+          ))}
+        </div>
+
+      </div>
+    </section>
+  )
+}
 
 export default function App() {
   const [loading, setLoading] = useState(true)
@@ -32,47 +162,26 @@ export default function App() {
 
   return (
     <>
-      {/* ── ESTILOS RESPONSIVOS ── */}
       <style>{`
         @keyframes dari-fade-in {
           from { opacity: 0; transform: scale(0.96); }
           to   { opacity: 1; transform: scale(1); }
         }
-        @keyframes dari-pulse {
-          0%, 100% { opacity: 1; }
-          50%       { opacity: 0.5; }
-        }
-        @keyframes dari-spin {
-          to { transform: rotate(360deg); }
-        }
 
-        /* ── MOBILE ── */
         @media (max-width: 768px) {
-          .dari-header-inner {
-            padding: 0 20px !important;
-            height: 64px !important;
-          }
+          .dari-header-inner { padding: 0 20px !important; height: 64px !important; }
           .dari-nav { display: none !important; }
           .dari-logo img { height: 44px !important; }
 
-          .dari-hero {
-            grid-template-columns: 1fr !important;
-            padding: 40px 20px 60px !important;
-            gap: 40px !important;
-          }
+          .dari-hero { grid-template-columns: 1fr !important; padding: 40px 20px 60px !important; gap: 40px !important; }
           .dari-hero-img { height: 380px !important; object-position: center center !important; }
-          .dari-hero-card {
-            bottom: -16px !important; left: 12px !important;
-            max-width: 220px !important;
-            padding: 14px 16px !important;
-          }
+          .dari-hero-card { bottom: -16px !important; left: 12px !important; max-width: 220px !important; padding: 14px 16px !important; }
           .dari-hero-card p { font-size: 13px !important; }
+          .dari-hero-btns { flex-direction: column !important; }
+          .dari-hero-btns a { text-align: center !important; }
+          .dari-availability { font-size: 13px !important; }
 
-          .dari-sobre {
-            grid-template-columns: 1fr !important;
-            padding: 48px 20px !important;
-            gap: 32px !important;
-          }
+          .dari-sobre { grid-template-columns: 1fr !important; padding: 48px 20px !important; gap: 32px !important; }
           .dari-sobre-img { height: 400px !important; object-position: center top !important; }
 
           .dari-diferencial { padding: 48px 20px !important; }
@@ -97,27 +206,16 @@ export default function App() {
           .dari-galeria-grid { grid-template-columns: 1fr 1fr !important; }
           .dari-galeria-img { height: 280px !important; object-position: center center !important; }
 
-          .dari-contato-inner {
-            grid-template-columns: 1fr !important;
-            gap: 40px !important;
-            padding: 48px 20px !important;
-          }
-          .dari-contato-section { padding: 0 !important; }
+          .dari-testimonials { padding: 48px 20px !important; }
+
+          .dari-contato-inner { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .dari-contato-section { padding: 48px 20px !important; }
           .dari-contato-info { grid-template-columns: 90px 1fr !important; }
-
-          .dari-footer-inner {
-            flex-direction: column !important;
-            gap: 20px !important;
-            text-align: center !important;
-            padding: 28px 20px !important;
-          }
-          .dari-footer-links { flex-wrap: wrap !important; justify-content: center !important; gap: 20px !important; }
-
-          .dari-hero-btns { flex-direction: column !important; }
-          .dari-hero-btns a { text-align: center !important; }
-
           .dari-contato-btns { flex-direction: column !important; }
           .dari-contato-btns a { text-align: center !important; }
+
+          .dari-footer-inner { flex-direction: column !important; gap: 20px !important; text-align: center !important; padding: 28px 20px !important; }
+          .dari-footer-links { flex-wrap: wrap !important; justify-content: center !important; gap: 20px !important; }
         }
 
         @media (max-width: 480px) {
@@ -132,34 +230,22 @@ export default function App() {
         }
       `}</style>
 
-      {/* ── LOADING SCREEN ── */}
+      {/* ── LOADING ── */}
       {loading && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
           backgroundColor: BG,
-          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          gap: 32,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 32,
           opacity: fadeOut ? 0 : 1,
           transition: 'opacity 0.6s ease',
           pointerEvents: fadeOut ? 'none' : 'all',
         }}>
-          <img
-            src={logoImg}
-            alt="Dari Boutique"
-            style={{
-              width: 180, height: 'auto',
-              animation: 'dari-fade-in 0.8s ease forwards',
-            }}
-          />
-          {/* barra de progresso fina */}
-          <div style={{ width: 120, height: 1.5, backgroundColor: 'rgba(176,64,112,0.2)', borderRadius: 2, overflow: 'hidden' }}>
+          <img src={logoImg} alt="Dari Boutique" style={{ width: 180, height: 'auto', animation: 'dari-fade-in 0.8s ease forwards' }} />
+          <div style={{ width: 120, height: 2, backgroundColor: 'rgba(176,64,112,0.15)', borderRadius: 2, overflow: 'hidden' }}>
             <div style={{
-              height: '100%',
-              background: 'linear-gradient(90deg, #c04478, #8a2f56)',
-              animation: 'dari-spin 1.4s linear infinite',
-              transformOrigin: 'left',
-              width: '40%',
-              borderRadius: 2,
+              height: '100%', width: '100%',
+              background: 'linear-gradient(90deg, transparent, #c04478, transparent)',
+              animation: 'dari-fade-in 1.4s linear infinite',
             }} />
           </div>
         </div>
@@ -168,9 +254,7 @@ export default function App() {
       <div style={{ backgroundColor: BG, fontFamily: "'Jost', system-ui, sans-serif", color: '#2c1f18' }}>
 
         {/* ── BOTÃO FLUTUANTE WHATSAPP ── */}
-        <a
-          href={WA_LINK} target="_blank" rel="noopener noreferrer"
-          title="Fale no WhatsApp"
+        <a href={WA_LINK} target="_blank" rel="noopener noreferrer" title="Agendar pelo WhatsApp"
           style={{
             position: 'fixed', bottom: 28, right: 28, zIndex: 100,
             width: 52, height: 52, borderRadius: '50%',
@@ -183,28 +267,17 @@ export default function App() {
           onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.08)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(176,64,112,0.55)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(176,64,112,0.4)' }}
         >
-          {/* ícone WhatsApp SVG */}
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.16 1.6 5.97L0 24l6.18-1.62A11.94 11.94 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.22-3.48-8.52zM12 21.93c-1.83 0-3.63-.49-5.2-1.42l-.37-.22-3.83 1 1.02-3.72-.24-.38A9.93 9.93 0 0 1 2.07 12C2.07 6.52 6.52 2.07 12 2.07c2.65 0 5.14 1.03 7.01 2.9A9.88 9.88 0 0 1 21.93 12c0 5.48-4.45 9.93-9.93 9.93zm5.45-7.44c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.35z" fill="white"/>
           </svg>
         </a>
 
         {/* ── HEADER ── */}
-        <header style={{
-          position: 'sticky', top: 0, zIndex: 50,
-          backgroundColor: BG,
-          borderBottom: '1px solid rgba(176,64,112,0.12)',
-        }}>
+        <header style={{ position: 'sticky', top: 0, zIndex: 50, backgroundColor: BG, borderBottom: '1px solid rgba(176,64,112,0.12)' }}>
           <div className="dari-header-inner" style={{ maxWidth: 1200, margin: '0 auto', padding: '0 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72 }}>
-
             <a href="#" className="dari-logo" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-              <img
-                src={logoImg}
-                alt="Dari Boutique"
-                style={{ height: 56, width: 'auto', display: 'block' }}
-              />
+              <img src={logoImg} alt="Dari Boutique" style={{ height: 56, width: 'auto', display: 'block' }} />
             </a>
-
             <nav className="dari-nav" style={{ display: 'flex', alignItems: 'center', gap: 36 }}>
               {['SOBRE', 'EXCLUSIVIDADE', 'A LOJA', 'CONTATO'].map(label => (
                 <a key={label} href={`#${label.toLowerCase().replace(' ', '-')}`}
@@ -214,8 +287,7 @@ export default function App() {
                 >{label}</a>
               ))}
               <a href={WA_LINK} target="_blank" rel="noopener noreferrer" style={{
-                display: 'inline-flex', alignItems: 'center',
-                padding: '12px 22px',
+                display: 'inline-flex', alignItems: 'center', padding: '12px 22px',
                 background: 'linear-gradient(135deg, #c04478 0%, #8a2f56 100%)',
                 color: '#fff', fontFamily: "'Jost', sans-serif",
                 fontSize: 11, fontWeight: 600, letterSpacing: '0.18em',
@@ -238,8 +310,12 @@ export default function App() {
               Vista-se de si mesma e descubra a{' '}
               <em style={{ fontStyle: 'italic', color: '#b04070' }}>sua melhor versão</em>.
             </h1>
-            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 'clamp(17px, 1.5vw, 18px)', fontWeight: 300, lineHeight: 1.85, color: '#6b5048', maxWidth: 460, marginBottom: 40 }}>
+            <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 'clamp(17px, 1.5vw, 18px)', fontWeight: 300, lineHeight: 1.85, color: '#6b5048', maxWidth: 460, marginBottom: 32 }}>
               Acreditamos que a roupa certa tem o poder de transformar o seu dia e elevar a sua autoestima. Na Dari, cada visita é pensada só para você.
+            </p>
+            {/* Disponibilidade */}
+            <p className="dari-availability" style={{ fontFamily: "'Jost', sans-serif", fontSize: 14, fontWeight: 400, color: '#8a7570', letterSpacing: '0.03em', marginBottom: 24, fontStyle: 'italic' }}>
+              Atendimento individual, um horário por vez — reserve o seu.
             </p>
             <div className="dari-hero-btns" style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               <a href={WA_LINK} target="_blank" rel="noopener noreferrer" style={{
@@ -250,12 +326,6 @@ export default function App() {
                 textDecoration: 'none', textTransform: 'uppercase',
                 boxShadow: '0 4px 20px rgba(176,64,112,0.35)',
               }}>AGENDAR MEU HORÁRIO</a>
-              <a href={IG_LINK} target="_blank" rel="noopener noreferrer" style={{
-                padding: '14px 28px',
-                border: '1px solid rgba(176,64,112,0.4)', color: '#b04070',
-                fontFamily: "'Jost', sans-serif", fontSize: 11, fontWeight: 500, letterSpacing: '0.2em',
-                textDecoration: 'none', textTransform: 'uppercase', background: 'transparent',
-              }}>SAIBA MAIS</a>
             </div>
           </div>
           <div style={{ position: 'relative' }}>
@@ -307,10 +377,22 @@ export default function App() {
             <div className="dari-diferencial-cards" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr' }}>
               <div className="dari-diferencial-card" style={{ background: '#fff', padding: '48px 52px' }}>
                 <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 13, fontWeight: 500, letterSpacing: '0.28em', color: '#b04070', marginBottom: 20, textTransform: 'uppercase' }}>SESSÃO PRIVATIVA · DARI BOUTIQUE</p>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(24px, 2.5vw, 30px)', fontWeight: 400, color: '#2c1f18', marginBottom: 20 }}>Reserve seu horário exclusivo</h3>
-                <p style={{ fontSize: 'clamp(17px, 1.5vw, 18px)', fontWeight: 300, lineHeight: 1.85, color: '#6b5048' }}>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(24px, 2.5vw, 30px)', fontWeight: 400, color: '#2c1f18', marginBottom: 16 }}>Reserve seu horário exclusivo</h3>
+                <p style={{ fontSize: 'clamp(17px, 1.5vw, 18px)', fontWeight: 300, lineHeight: 1.85, color: '#6b5048', marginBottom: 28 }}>
                   Você agenda o dia e a hora, e a loja fica reservada só para você durante toda a visita — com uma consultora dedicada a te ajudar a montar looks, provar com calma e escolher sem pressa.
                 </p>
+                {/* Disponibilidade + CTA */}
+                <p style={{ fontFamily: "'Jost', sans-serif", fontSize: 14, fontWeight: 400, color: '#8a7570', fontStyle: 'italic', marginBottom: 20 }}>
+                  Atendimento individual, um horário por vez — reserve o seu.
+                </p>
+                <a href={WA_LINK} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'inline-block', padding: '14px 28px',
+                  background: 'linear-gradient(135deg, #c04478 0%, #8a2f56 100%)',
+                  color: '#fff', fontFamily: "'Jost', sans-serif",
+                  fontSize: 11, fontWeight: 600, letterSpacing: '0.2em',
+                  textDecoration: 'none', textTransform: 'uppercase',
+                  boxShadow: '0 4px 20px rgba(176,64,112,0.35)',
+                }}>AGENDAR MEU HORÁRIO</a>
               </div>
               <div className="dari-diferencial-stat" style={{ background: '#e8d0d9', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
                 <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 80, fontWeight: 400, color: '#b04070', lineHeight: 1, marginBottom: 8 }}>1</p>
@@ -392,6 +474,9 @@ export default function App() {
           </div>
         </section>
 
+        {/* ── DEPOIMENTOS ── */}
+        <Testimonials />
+
         {/* ── CONTATO ── */}
         <section id="contato" className="dari-contato-section" style={{ backgroundColor: '#ede3db', padding: '80px 32px' }}>
           <div className="dari-contato-inner" style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
@@ -424,12 +509,6 @@ export default function App() {
                   textDecoration: 'none', textTransform: 'uppercase',
                   boxShadow: '0 4px 16px rgba(176,64,112,0.38)',
                 }}>AGENDAR MEU HORÁRIO</a>
-                <a href={IG_LINK} target="_blank" rel="noopener noreferrer" style={{
-                  padding: '14px 24px',
-                  border: '1px solid rgba(176,64,112,0.4)', color: '#b04070',
-                  fontFamily: "'Jost', sans-serif", fontSize: 11, fontWeight: 500, letterSpacing: '0.18em',
-                  textDecoration: 'none', textTransform: 'uppercase', background: 'transparent',
-                }}>SAIBA MAIS</a>
               </div>
             </div>
             <div>
